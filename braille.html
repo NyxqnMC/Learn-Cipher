@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+  <title>Braille Reference — Learn Cipher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar"><div class="logo">🔐 Learn Cipher</div><nav><a href="index.html">Home</a><a href="morse.html">Morse</a><a href="binary.html">Binary</a><a href="braille.html">Braille</a></nav></header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Braille — Full Reference (A–Z, 1–0)</h2>
+      <div class="controls"><div class="small">Click a row to copy the Braille character (Unicode). Click ▶ to show name.</div></div>
+      <div class="table-wrap">
+        <table class="ref-table" id="brailleTable">
+          <thead><tr><th>Letter</th><th>Braille</th><th>Show</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+// Unicode Braille patterns for letters a-z (Grade 1 mapping)
+const brailleMap = {
+ 'A':'⠁','B':'⠃','C':'⠉','D':'⠙','E':'⠑','F':'⠋','G':'⠛','H':'⠓','I':'⠊','J':'⠚',
+ 'K':'⠅','L':'⠇','M':'⠍','N':'⠝','O':'⠕','P':'⠏','Q':'⠟','R':'⠗','S':'⠎','T':'⠞',
+ 'U':'⠥','V':'⠧','W':'⠺','X':'⠭','Y':'⠽','Z':'⠵',
+ // numbers 1-0 in literary braille (often same glyphs with number sign; here we show letters commonly used)
+ '1':'⠁','2':'⠃','3':'⠉','4':'⠙','5':'⠑','6':'⠋','7':'⠛','8':'⠓','9':'⠊','0':'⠚'
+};
+
+function buildBrailleTable(){
+  const tbody = document.querySelector('#brailleTable tbody'); tbody.innerHTML='';
+  Object.keys(brailleMap).forEach(ch=>{
+    const tr = document.createElement('tr'); tr.className='ref-row';
+    const tdL = document.createElement('td'); tdL.textContent = ch;
+    const tdB = document.createElement('td'); tdB.innerHTML = '<span class="kbd">'+brailleMap[ch]+'</span>';
+    const tdS = document.createElement('td');
+    const showBtn = document.createElement('button'); showBtn.textContent='▶'; showBtn.title='Show '+ch;
+    showBtn.onclick = (e)=>{ e.stopPropagation(); alert(ch + ' → ' + brailleMap[ch]); };
+    tdS.appendChild(showBtn);
+    tr.appendChild(tdL); tr.appendChild(tdB); tr.appendChild(tdS);
+    tr.onclick = ()=>{
+      navigator.clipboard?.writeText(brailleMap[ch]);
+      tdB.innerHTML = '<span class="copy-badge">Copied: '+brailleMap[ch]+'</span>';
+      setTimeout(()=>{ tdB.innerHTML = '<span class="kbd">'+brailleMap[ch]+'</span>'; },900);
+    };
+    tbody.appendChild(tr);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', buildBrailleTable);
+</script>
+</body>
+</html>

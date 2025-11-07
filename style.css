@@ -1,0 +1,29 @@
+:root{
+  --bg:#071023; --card:#0b1830; --muted:#9fb3c8; --accent:#7c3aed; --glass: rgba(255,255,255,0.03);
+  --success:#6ee7b7;
+}
+*{box-sizing:border-box;font-family:Inter, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial}
+body{margin:0;background:linear-gradient(180deg,var(--bg),#021122);color:#e6f0fb;min-height:100vh}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 28px;background:rgba(255,255,255,0.02)}
+.logo{font-weight:700;color:var(--accent)}
+nav a{color:var(--muted);margin-left:18px;text-decoration:none;font-weight:600}
+.hero{text-align:center;padding:60px 20px}
+.hero h1{font-size:32px;margin:0 0 8px}
+.hero p{color:var(--muted);margin:0 0 18px}
+.actions button{margin:6px;padding:12px 18px;border-radius:12px;border:0;background:linear-gradient(90deg,var(--accent),#5b21b6);color:white;cursor:pointer;font-weight:700}
+.card{background:var(--card);border-radius:12px;padding:14px;margin:16px;box-shadow:0 8px 30px rgba(2,6,23,0.6)}
+.container{max-width:980px;margin:18px auto;padding:0 12px}
+.table-wrap{overflow:auto;background:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.005));padding:12px;border-radius:10px}
+.ref-table{width:100%;border-collapse:collapse}
+.ref-table th,.ref-table td{padding:10px 8px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.03)}
+.ref-table th{color:var(--muted);font-size:13px}
+.ref-row{cursor:pointer;transition:transform .12s,bg .12s}
+.ref-row:hover{transform:translateY(-4px);background:rgba(255,255,255,0.02)}
+.kbd{background:#05142a;padding:6px 8px;border-radius:8px;font-family:monospace}
+.controls{display:flex;gap:8px;align-items:center;margin:12px 0;flex-wrap:wrap}
+.small{color:var(--muted);font-size:14px}
+.copy-badge{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);font-family:monospace}
+.foot{text-align:center;padding:24px;color:var(--muted);margin-top:24px}
+
+/* responsive */
+@media (max-width:820px){.ref-table th,.ref-table td{padding:8px 6px}}

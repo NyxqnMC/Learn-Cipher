@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+  <title>Binary Reference — Learn Cipher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar"><div class="logo">🔐 Learn Cipher</div><nav><a href="index.html">Home</a><a href="morse.html">Morse</a><a href="binary.html">Binary</a><a href="braille.html">Braille</a></nav></header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Binary (ASCII) — Full Reference (A–Z, 0–9)</h2>
+      <div class="controls"><div class="small">Click a row to copy the 8-bit binary. Click the ▶ to convert & show character.</div></div>
+      <div class="table-wrap">
+        <table class="ref-table" id="binaryTable">
+          <thead><tr><th>Letter</th><th>Binary</th><th>Show</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+function charToBinary(ch){ return ch.charCodeAt(0).toString(2).padStart(8,'0'); }
+
+const letters = [...'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'];
+
+function buildBinaryTable(){
+  const tbody = document.querySelector('#binaryTable tbody'); tbody.innerHTML='';
+  letters.forEach(ch=>{
+    const tr = document.createElement('tr'); tr.className='ref-row';
+    const tdL = document.createElement('td'); tdL.textContent = ch;
+    const bin = charToBinary(ch);
+    const tdB = document.createElement('td'); tdB.innerHTML = '<span class="kbd">'+bin+'</span>';
+    const tdS = document.createElement('td');
+    const showBtn = document.createElement('button'); showBtn.textContent='▶'; showBtn.title='Show '+ch;
+    showBtn.onclick = (e)=>{ e.stopPropagation(); alert(ch + ' → ' + bin); };
+    tdS.appendChild(showBtn);
+    tr.appendChild(tdL); tr.appendChild(tdB); tr.appendChild(tdS);
+    tr.onclick = ()=>{
+      navigator.clipboard?.writeText(bin);
+      tdB.innerHTML = '<span class="copy-badge">Copied: '+bin+'</span>';
+      setTimeout(()=>{ tdB.innerHTML = '<span class="kbd">'+bin+'</span>'; },900);
+    };
+    tbody.appendChild(tr);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', buildBinaryTable);
+</script>
+</body>
+</html>

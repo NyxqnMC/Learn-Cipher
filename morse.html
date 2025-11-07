@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+  <title>Morse Reference — Learn Cipher</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar"><div class="logo">🔐 Learn Cipher</div><nav><a href="index.html">Home</a><a href="morse.html">Morse</a><a href="binary.html">Binary</a><a href="braille.html">Braille</a></nav></header>
+
+  <div class="container">
+    <div class="card">
+      <h2>Morse Code — Full Reference (A–Z, 0–9)</h2>
+      <div class="controls">
+        <div class="small">Click a row to copy the Morse code. Click the ▶ play icon to hear it.</div>
+      </div>
+      <div class="table-wrap">
+        <table class="ref-table" id="morseTable">
+          <thead><tr><th>Letter</th><th>Morse</th><th>Play</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+<script>
+const MORSE = {
+  'A':'.-','B':'-...','C':'-.-.','D':'-..','E':'.','F':'..-.','G':'--.','H':'....','I':'..','J':'.---',
+  'K':'-.-','L':'.-..','M':'--','N':'-.','O':'---','P':'.--.','Q':'--.-','R':'.-.','S':'...','T':'-',
+  'U':'..-','V':'...-','W':'.--','X':'-..-','Y':'-.--','Z':'--..',
+  '0':'-----','1':'.----','2':'..---','3':'...--','4':'....-','5':'.....','6':'-....','7':'--...','8':'---..','9':'----.'
+};
+
+// audio
+let audioCtx=null;
+function beep(duration){
+  if(!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const o=audioCtx.createOscillator(), g=audioCtx.createGain();
+  o.type='sine'; o.frequency.value=700;
+  g.gain.value=0.0001; o.connect(g); g.connect(audioCtx.destination); o.start();
+  const now=audioCtx.currentTime;
+  g.gain.exponentialRampToValueAtTime(0.2, now+0.002);
+  g.gain.exponentialRampToValueAtTime(0.0001, now+duration/1000);
+  o.stop(now+duration/1000+0.02);
+}
+
+function playMorseCode(code){
+  const DOT=100, DASH=300, GAP=100, BETWEEN=300;
+  let t=0;
+  for(const token of code.split(' ')){
+    if(token==='/' ){ t+=BETWEEN; continue; }
+    for(const ch of token){
+      setTimeout(()=>beep(ch==='.'?DOT:DASH), t);
+      t += (ch==='.'?DOT:DASH) + GAP;
+    }
+    t += BETWEEN - GAP;
+  }
+}
+
+function buildMorseTable(){
+  const tbody = document.querySelector('#morseTable tbody');
+  tbody.innerHTML='';
+  Object.keys(MORSE).forEach(k=>{
+    const tr = document.createElement('tr'); tr.className='ref-row';
+    const tdL = document.createElement('td'); tdL.textContent = k;
+    const tdM = document.createElement('td'); tdM.innerHTML = '<span class="kbd">'+MORSE[k]+'</span>';
+    const tdP = document.createElement('td');
+    const playBtn = document.createElement('button'); playBtn.textContent='▶'; playBtn.title='Play '+k;
+    playBtn.onclick = (e)=>{ e.stopPropagation(); playMorseCode(MORSE[k]); };
+    tdP.appendChild(playBtn);
+    tr.appendChild(tdL); tr.appendChild(tdM); tr.appendChild(tdP);
+    tr.onclick = ()=>{
+      navigator.clipboard?.writeText(MORSE[k]);
+      tdM.innerHTML = '<span class="copy-badge">Copied: '+MORSE[k]+'</span>';
+      setTimeout(()=>{ tdM.innerHTML = '<span class="kbd">'+MORSE[k]+'</span>'; },900);
+    };
+    tbody.appendChild(tr);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{ buildMorseTable(); });
+</script>
+</body>
+</html>
